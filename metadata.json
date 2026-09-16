@@ -1,0 +1,6 @@
+{
+  "name": "ตอบคำถามแบบจัดอันดับ 😎",
+  "description": "เว็บเกมตอบคำถามตรรกะและการคิดวิเคราะห์ระดับสูงแบบจัดอันดับ No-Repeat พร้อมระบบ Replay Lock และ Video Rewards",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

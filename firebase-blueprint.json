@@ -1,0 +1,125 @@
+{
+  "entities": {
+    "Player": {
+      "title": "Player",
+      "description": "User profile with device ID and metadata",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "maxLength": 60 },
+        "age": { "type": "number" },
+        "deviceId": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "name", "deviceId"]
+    },
+    "Question": {
+      "title": "Question",
+      "description": "Logic quiz question with secret correctIndex and explanation",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "mode": { "type": "string", "enum": ["HARD", "EXTREME"] },
+        "category": { "type": "string" },
+        "question": { "type": "string" },
+        "options": { "type": "array" },
+        "correctIndex": { "type": "number" },
+        "explanation": { "type": "string" },
+        "trapType": { "type": "string" },
+        "trapExplanation": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "mode", "category", "question", "options", "correctIndex"]
+    },
+    "QuestionAllocation": {
+      "title": "QuestionAllocation",
+      "description": "Tracks question distribution to guarantee no repeats globally",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "questionId": { "type": "string" },
+        "sessionId": { "type": "string" },
+        "playerId": { "type": "string" },
+        "mode": { "type": "string" },
+        "allocatedAt": { "type": "string" }
+      },
+      "required": ["id", "questionId", "sessionId", "allocatedAt"]
+    },
+    "Session": {
+      "title": "Session",
+      "description": "Active or completed game session with server-validated answers",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "deviceId": { "type": "string" },
+        "playerName": { "type": "string" },
+        "playerAge": { "type": "number" },
+        "mode": { "type": "string" },
+        "questionIds": { "type": "array" },
+        "currentQuestionIndex": { "type": "number" },
+        "score": { "type": "number" },
+        "status": { "type": "string", "enum": ["active", "completed", "abandoned"] },
+        "startedAt": { "type": "number" }
+      },
+      "required": ["id", "deviceId", "playerName", "mode", "status"]
+    },
+    "LeaderboardEntry": {
+      "title": "LeaderboardEntry",
+      "description": "Public ranking record sorted by score descending and duration ascending",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "sessionId": { "type": "string" },
+        "playerName": { "type": "string" },
+        "playerAge": { "type": "number" },
+        "mode": { "type": "string" },
+        "score": { "type": "number" },
+        "totalQuestions": { "type": "number" },
+        "durationMs": { "type": "number" },
+        "iqEstimate": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "sessionId", "playerName", "mode", "score", "durationMs"]
+    },
+    "VideoReward": {
+      "title": "VideoReward",
+      "description": "Configurable video reward rule for mode and score ranges",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "mode": { "type": "string" },
+        "minScore": { "type": "number" },
+        "maxScore": { "type": "number" },
+        "videoUrl": { "type": "string" }
+      },
+      "required": ["id", "title", "mode", "minScore", "maxScore", "videoUrl"]
+    }
+  },
+  "firestore": {
+    "/players/{playerId}": {
+      "schema": "Player",
+      "description": "Registered player profiles"
+    },
+    "/questions/{questionId}": {
+      "schema": "Question",
+      "description": "Quiz pool of logic questions (secret answers managed on backend)"
+    },
+    "/questionAllocations/{allocationId}": {
+      "schema": "QuestionAllocation",
+      "description": "Permanent allocation log to enforce no-repeat policy"
+    },
+    "/sessions/{sessionId}": {
+      "schema": "Session",
+      "description": "Game sessions with replay lock and resume capabilities"
+    },
+    "/leaderboard/{entryId}": {
+      "schema": "LeaderboardEntry",
+      "description": "Competitive public leaderboard"
+    },
+    "/videoRewards/{rewardId}": {
+      "schema": "VideoReward",
+      "description": "Admin defined video reward mappings"
+    }
+  }
+}
